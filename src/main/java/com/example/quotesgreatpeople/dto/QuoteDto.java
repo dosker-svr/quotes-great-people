@@ -22,5 +22,4 @@ public class QuoteDto {
     private LocalDateTime updateDate;
     @NotNull
     private String createdUserName;
-//    private Set<VoteDto> voteSet = new HashSet<>();
 }

@@ -34,6 +34,7 @@ public class QuoteServiceTest {
                 .content("Before Content.")
                 .createdUserName(createdUserName)
                 .build();
+
         quoteService.createQuote(quoteIn);
         quoteService.createQuote(quoteIn);
         quoteService.createQuote(quoteIn);

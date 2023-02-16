@@ -6,9 +6,6 @@ import com.example.quotesgreatpeople.entity.UserEntity;
 import com.example.quotesgreatpeople.entity.VoteEntity;
 import com.example.quotesgreatpeople.repository.QuoteRepository;
 import com.example.quotesgreatpeople.repository.UserRepository;
-import com.example.quotesgreatpeople.service.QuoteServiceImpl;
-import com.example.quotesgreatpeople.service.UserServiceImpl;
-import com.example.quotesgreatpeople.service.VoteServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -44,7 +41,6 @@ public class VoteMapper {
             throw new NullPointerException("Upvote/downvote couldn't 'null'");
         }
         voteEntity.isUpvote(dto.getIsUpvote());
-//        voteEntity.quote(quoteService.getQuoteEntityById(dto.getQuoteId()));
 
         final Optional<QuoteEntity> optionalQuote = quoteRepository.findById(dto.getQuoteId());
         if (optionalQuote.isEmpty()) {
@@ -57,7 +53,6 @@ public class VoteMapper {
             throw new NullPointerException("User with id='" + dto.getVotedUserName() + "' not found.");
         }
         voteEntity.votedUser(optionalUser.get());
-//        voteEntity.votedUser(userService.getUserEntityByName(dto.getVotedUserName()));
         voteEntity.votedTime(dto.getVotedTime());
         return voteEntity.build();
     }

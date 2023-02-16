@@ -43,9 +43,8 @@ public class UserServiceImpl implements UserService {
 
         user.setCreationDate(LocalDateTime.now());
         final UserEntity userEntity = UserMapper.INSTANCE.toUserEntity(user);
-        // TODO : add throw
         if (userEntity == null) {
-            throw new NullPointerException("");
+            throw new NullPointerException("An error occurred after mapping user.");
         }
 
         return UserMapper.INSTANCE.toUserDto(userRepository.save(userEntity));

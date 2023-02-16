@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ExceptionResponse {
-
     private final LocalDateTime timestamp = LocalDateTime.now();
     private int status;
     private String error;
