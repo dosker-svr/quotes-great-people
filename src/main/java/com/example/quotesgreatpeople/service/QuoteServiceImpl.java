@@ -41,11 +41,9 @@ public class QuoteServiceImpl implements QuoteService {
         quote.setVotes(0);
 
         QuoteEntity quoteEntity = quoteMapper.toQuoteEntity(quote);
-        // TODO : add throw
         if (quoteEntity == null) {
             throw new NullPointerException("An error occurred after mapping quote.");
         }
-//        quoteEntity.setCreatedUser(userService.getUserEntityByName(quote.getCreatedUser()));
 
         return quoteMapper.toQuoteDto(quoteRepository.save(quoteEntity));
     }
@@ -96,8 +94,7 @@ public class QuoteServiceImpl implements QuoteService {
         if (quoteEntities.isEmpty()) {
             throw new NullPointerException("There is no Quotes.");
         }
-//        return quoteEntities;
-//        // TODO: change :
+
         return quoteEntities.stream()
                 .map(quoteMapper::toQuoteDto)
                 .collect(Collectors.toList());
@@ -128,7 +125,7 @@ public class QuoteServiceImpl implements QuoteService {
                 .map(quoteMapper::toQuoteDto)
                 .sorted(Comparator.comparing(QuoteDto::getVotes).reversed())
                 .collect(Collectors.toList());
-        System.out.println();
+
         return collect;
     }
 
@@ -137,12 +134,11 @@ public class QuoteServiceImpl implements QuoteService {
         if (first10ByVotes.isEmpty()) {
             throw new NullPointerException("There is no Quotes.");
         }
-        final List<QuoteDto> collect = first10ByVotes.stream()
+
+        return first10ByVotes.stream()
                 .map(quoteMapper::toQuoteDto)
                 .sorted(Comparator.comparing(QuoteDto::getVotes))
                 .collect(Collectors.toList());
-        System.out.println();
-        return collect;
     }
 
     @Transactional
@@ -157,7 +153,9 @@ public class QuoteServiceImpl implements QuoteService {
             throw new IllegalArgumentException("Trying to update fields not for modifying.");
         }
 
-        QuoteEntity modifiedEntity = quoteRepository.save(updateQuoteForModify(quoteDto, quoteEntityForUpdate));
+        QuoteEntity modifiedEntity = quoteRepository.save(
+                updateQuoteForModify(quoteDto, quoteEntityForUpdate)
+        );
         return quoteMapper.toQuoteDto(modifiedEntity);
     }
 
@@ -169,29 +167,9 @@ public class QuoteServiceImpl implements QuoteService {
         if (quoteRepository.findById(quoteId).isEmpty()) {
             throw new NullPointerException("Quote with id='" + quoteId + "' not found.");
         }
-        // TODO: cascade
+
         quoteRepository.deleteById(quoteId);
     }
-//TODO : delete this code
-
-//    @Transactional
-//    public void addVoteToQuote(VoteEntity vote) {
-//        final Long quoteId = vote.getQuote().getId();
-//        final Optional<QuoteEntity> optionalQuote = quoteRepository.findById(quoteId);
-//        if (optionalQuote.isEmpty()) {
-//            throw new NullPointerException("Quote with id='" + quoteId + "' not found.");
-//        }
-//
-//        QuoteEntity quote = optionalQuote.get();
-//        if (vote.isUpvote()) {
-//            quote.setVotes(quote.getVotes() + 1);
-//        } else {
-//            quote.setVotes(quote.getVotes() - 1);
-//        }
-////        quote.getVoteSet().add(vote);
-//
-////        quoteRepository.save(quote);
-//    }
 
     @Transactional
     public void changeNumberOfVotes(VoteEntity vote) {
@@ -211,7 +189,7 @@ public class QuoteServiceImpl implements QuoteService {
 
     private QuoteEntity updateQuoteForModify(QuoteDto quoteDto, QuoteEntity quoteEntity) {
         final String dtoContent = quoteDto.getContent();
-        final String dtoCreatedUserName = quoteDto.getCreatedUserName();//.getCreatedUser().getId();
+        final String dtoCreatedUserName = quoteDto.getCreatedUserName();
 
         // these fields can be update:
         boolean contentIsUpdate = dtoContent != null
@@ -238,18 +216,11 @@ public class QuoteServiceImpl implements QuoteService {
     }
 
     private boolean fieldsNotForUpdatingIsModified(QuoteDto quoteDto, QuoteEntity quoteEntity) {
-        // TODO: can be updated?
-        //final Long quoteDtoId = quoteDto.getId();
+        // these fields cannot be updated:
         final Integer votes = quoteDto.getVotes();
         final LocalDateTime creationDate = quoteDto.getCreationDate();
         final LocalDateTime updateDate = quoteDto.getUpdateDate();
-//        final Set<VoteDto> voteSet = quoteDto.getVoteSet();
-//        final Set<VoteEntity> voteListEntity = voteSet.stream()
-//                .map(VoteMapper.INSTANCE::toVoteEntity)
-//                .collect(Collectors.toSet());
 
-        // these fields cannot be updated:
-        //boolean idIsUpdate = !quoteDtoId.equals(quoteEntity.getId());
         if (votes == null && creationDate == null && updateDate == null ) {
             return false;
         } else {
@@ -267,9 +238,8 @@ public class QuoteServiceImpl implements QuoteService {
             if (updateDate != null) {
                 updateDateIsUpdate = !quoteEntity.getUpdateDate().equals(updateDate);
             }
-//        boolean voteListIsUpdate = !voteListEntity.containsAll(quoteEntity.getVoteSet());
 
-            return votesIdUpdate || creationDateIsUpdate || updateDateIsUpdate; //idIsUpdate || voteListIsUpdate;
+            return votesIdUpdate || creationDateIsUpdate || updateDateIsUpdate;
         }
     }
 }

@@ -33,8 +33,13 @@ public class VoteServiceImpl implements VoteService {
 
     @Transactional
     public boolean createVote(VoteDto voteDto) {
-        if (voteDto.getIsUpvote() == null || voteDto.getQuoteId() == null || voteDto.getVotedUserName() == null) {
-            throw new NullPointerException("Fields 'upvote/downvote', 'quote id', 'voted user name' must be present.");
+        if (voteDto.getIsUpvote() == null
+                || voteDto.getQuoteId() == null
+                || voteDto.getVotedUserName() == null
+        ) {
+            throw new NullPointerException(
+                    "Fields 'upvote/downvote', 'quote id', 'voted user name' must be present."
+            );
         }
         voteDto.setVotedTime(LocalDateTime.now());
         VoteEntity voteEntity = voteMapper.toVoteEntity(voteDto);

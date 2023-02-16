@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class VoteDto {
-    // TODO: to delete comments
     private Long id;
     @NotNull
     private Boolean isUpvote;
