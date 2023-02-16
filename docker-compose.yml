@@ -1,7 +1,7 @@
 version: '3'
 services:
   app:
-    image: doskersvr/quote-great
+    image: doskersvr/quotes-great:1.0.0
     container_name: app_quote
     ports:
       - 8080:8080
